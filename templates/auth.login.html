@@ -1,0 +1,64 @@
+{% extends "template.base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+          <h1>Sign In</h1>
+          {% if not error %}
+          <div class="alert alert-info">
+            <strong>Welcome!</strong> Please sign in with your NTU email address. If you do not have an account with us yet, please <a href="/accounts/register/">register</a> one now.
+          </div>
+          {% elif error == 'disabled' %}
+          <div class="alert alert-danger">
+            <strong>Error!</strong> Sorry, your account has been deactivated. Please <a href="mailto:clangkts@gmail.com" class="alert-link">contact</a> the site administrator.
+          </div>
+          {% elif error == 'inactive' %}
+          <div class="alert alert-danger">
+            <strong>Error!</strong> Sorry, you have yet to activate your account. Please use the link that has been sent to your email to activate.
+          </div>
+          {% elif error == 'incorrect' %}
+          <div class="alert alert-danger">
+            <strong>Error!</strong> Sorry, your credentials are incorrect.
+          </div>
+          {% elif error == 'permission' %}
+          <div class="alert alert-danger">
+            <strong>Error!</strong> Sorry, your account do not have the permissions required to visit this page. Please sign in with your staff account.
+          </div>
+          {% endif %}
+          <form class="form-horizontal" method="post" role="form">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="username" class="col-sm-3 control-label">Email</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter NTU Email">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password" class="col-sm-3 control-label">Password</label>
+              <div class="col-sm-6">
+                <input type="password" class="form-control" name="password" value="" id="password" placeholder="Password">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-3 col-sm-6">
+                <!--<div class="checkbox">
+                  <label>
+                    <input type="checkbox"> Remember me
+                  </label>
+                </div>-->
+                <a href="/accounts/forgot/">Forgot your password?</a>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-3 col-sm-6">
+                <button type="submit" class="btn btn-primary">Sign In</button>
+              </div>
+            </div>
+            <input type="hidden" name="next" value="{{ next|escape }}" />
+          </form>
+        </div>
+        <br>
+      </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "template.base.html" %}
+
+{% block title %}Password Reset{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-md-12 col-lg-10 col-lg-offset-1">
+          <h1>Password Reset</h1>
+          <blockquote>
+            <p>Fill in your new passwords and click on submit</p>
+          </blockquote>
+          {% if form.errors %}
+          <div class="alert alert-danger">
+            <strong>Sorry!</strong> There {{ form.errors|pluralize:"is an,are" }} error{{ form.errors|pluralize }} in the form. Please rectify them and resubmit.
+          </div>
+          {% endif %}
+          <form class="form-horizontal" method="post" role="form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <input type="hidden" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" value="{{ form.email.value|default_if_none:'' }}">
+            <div class="form-group {% if form.password.errors %}has-error{% endif %}">
+              <label for="{{ form.password.id_for_label }}" class="col-sm-3 control-label">Password</label>
+              <div class="col-sm-6">
+                <input type="password" class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" value="{{ form.password.value|default_if_none:'' }}" placeholder="Password">
+              </div>
+              <div class="col-sm-3">
+                {{ form.password.errors }}
+              </div>
+            </div>
+            <div class="form-group {% if form.cfm_password.errors %}has-error{% endif %}">
+              <label for="{{ form.cfm_password.id_for_label }}" class="col-sm-3 control-label">Confirm Password</label>
+              <div class="col-sm-6">
+                <input type="password" class="form-control" id="{{ form.cfm_password.id_for_label }}" name="{{ form.cfm_password.html_name }}" value="{{ form.cfm_password.value|default_if_none:'' }}" placeholder="Password Again">
+              </div>
+              <div class="col-sm-3">
+                {{ form.cfm_password.errors }}
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-6 col-sm-offset-3 ">
+                <button type="submit" id="register_btn" class="btn btn-primary" data-loading-text="Resetting...">Reset Password</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+{% endblock %}

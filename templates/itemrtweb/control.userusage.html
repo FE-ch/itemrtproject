@@ -1,0 +1,27 @@
+{% extends "itemrtweb/control-empty.html" %}
+
+{# Currently not used yet #}
+
+{% block control-content %}
+            <h2>User Usage</h2>
+            <div class="panel panel-default">
+              <table class="table table-striped panel-body">
+                <thead>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Last Accessed</th>
+                  <th>Location</th>
+                </thead>
+                <tbody>
+                  {% for flag in flagged_qns %}
+                  <tr>
+                    <td>{{ flag.id }}</td>
+                    <td><a href="/prototype/preview/question/{{ flag.question.id }}/">{{ flag.question.id }}</a></td>
+                    <td title="Email: {{user.email}}">{{ flag.user.get_full_name }}</td>
+                    <td>{{ flag.issue }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+{% endblock %}

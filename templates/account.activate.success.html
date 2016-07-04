@@ -1,0 +1,26 @@
+{% extends "template.base.html" %}
+
+{% block extrahead %}
+<meta http-equiv="refresh" content="5;url=/">
+{% endblock %}
+
+{% block title %}Account Activation{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+          <h1>Account Activation</h1>
+          {% if not error %}
+          <div class="alert alert-success">
+            <p><strong>Success!</strong> Your account is now activated and ready to use.</p>
+            <p>We will now redirect you back to the main page in 5 seconds.</p>
+          </div>
+          {% elif error == 'activated' %}
+          <div class="alert alert-warning">
+            <p><strong>Hmmmm?</strong> Your account has already been activated, so no further action is required.</p>
+            <p>We will now redirect you back to the main page in 5 seconds.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+{% endblock %}

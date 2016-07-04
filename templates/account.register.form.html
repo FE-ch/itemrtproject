@@ -1,0 +1,70 @@
+{% extends "template.base.html" %}
+
+{% block title %}Registation{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-md-12 col-lg-10 col-lg-offset-1">
+          <h1>Registration</h1>
+          <blockquote>
+            <p>Welcome to {{ PROJECT_NAME }}!</p>
+            <div>Please complete the registration form to access our services.</div>
+          </blockquote>
+          {% if form.errors %}
+          <div class="alert alert-danger">
+            <strong>Sorry!</strong> There {{ form.errors|pluralize:"is an,are" }} error{{ form.errors|pluralize }} in the form. Please rectify them and resubmit.
+          </div>
+          {% endif %}
+          <form class="form-horizontal" method="post" role="form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group {% if form.first_name.errors or form.last_name.errors %}has-error{% endif %}">
+              <label for="{{ form.first_name.id_for_label }}" class="col-sm-3 control-label">Full Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.html_name }}" placeholder="First Name" value="{{ form.first_name.value|default_if_none:'' }}" maxlength="{{ form.first_name.field.max_length }}">
+                <input type="text" class="form-control pull-right" id="{{ form.last_name.id_for_label }}" name="{{ form.last_name.html_name }}" placeholder="Last/Surname" value="{{ form.last_name.value|default_if_none:'' }}" maxlength="{{ form.last_name.field.max_length }}">
+              </div>
+              <div class="col-sm-3">
+                {{ form.first_name.errors }}
+                {{ form.last_name.errors }}
+              </div>
+            </div>
+            <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+              <label for="{{ form.email.id_for_label }}" class="col-sm-3 control-label">Email</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" placeholder="Your NTU Email (@e.ntu.edu.sg)" value="{{ form.email.value|default_if_none:'' }}" maxlength="{{ form.email.field.max_length }}">
+                <span class="help-block">The email address will be used to verify your identity.</span>
+              </div>
+              <div class="col-sm-3">
+                {{ form.email.errors }}
+              </div>
+            </div>
+            <div class="form-group {% if form.password.errors %}has-error{% endif %}">
+              <label for="{{ form.password.id_for_label }}" class="col-sm-3 control-label">Password</label>
+              <div class="col-sm-6">
+                <input type="password" class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" value="{{ form.password.value|default_if_none:'' }}" placeholder="Password">
+              </div>
+              <div class="col-sm-3">
+                {{ form.password.errors }}
+              </div>
+            </div>
+            <div class="form-group {% if form.cfm_password.errors %}has-error{% endif %}">
+              <label for="{{ form.cfm_password.id_for_label }}" class="col-sm-3 control-label">Confirm Password</label>
+              <div class="col-sm-6">
+                <input type="password" class="form-control" id="{{ form.cfm_password.id_for_label }}" name="{{ form.cfm_password.html_name }}" value="{{ form.cfm_password.value|default_if_none:'' }}" placeholder="Password Again">
+              </div>
+              <div class="col-sm-3">
+                {{ form.cfm_password.errors }}
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-6 col-sm-offset-3 ">
+                <button type="submit" id="register_btn" class="btn btn-primary" data-loading-text="Registering...">Register</button>
+                <a class="btn btn-default" href="/">Cancel</a>
+              </div>
+            </div>
+            <input type="hidden" name="next" value="{{ next|escape }}" />
+          </form>
+        </div>
+      </div>
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends "template.base.html" %}
+
+{% block title %}CAT Test{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(document).ready(function() {
+      /* AJAX time retrival for tests */
+      if($('#test_timer').length) {
+        /* Find test ID and get test ending time from server */
+        var request = $.ajax({
+          url: "/trialtest/{{ test_id }}/getendtime/",
+          cache: false
+        })
+
+        request.done(function(msg) {
+          var enddate = new Date(msg);
+
+          $('#test_timer').countdown({until: enddate, compact: true, format: 'HMS', description: '', alwaysExpire: true, onExpiry: testExpired});
+        });
+      };
+    });
+
+    function testExpired() {
+      alert("Time's up! Proceeding to next question...");
+
+      var test_form = $("#test_form");
+      var answer = $('input[name=ans]:checked', '#test_form').val()
+
+      if(!answer) {
+        var $hiddenInput = $('<input/>',{type:'hidden',name:"ans",value:"<MCQ Empty>"});
+        $hiddenInput.appendTo(test_form);
+      }
+
+      test_form.submit();
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-lg-12">
+          <h1>CAT Test<a href="/cattest/" class="btn btn-danger pull-right">End CAT Test</a></h1>
+        </div>
+      </div>
+      <div id="contentrow" class="row">
+        <div class="col-lg-9">
+          {% if error.unselected %}
+          <div class="alert alert-danger">
+            <strong>Error!</strong> Please select an answer from the choices given!
+          </div>
+          {% endif %}
+          <div class="row">
+            <div id="qlabel" class="col-md-1">
+              <h3>Q:</h3>
+            </div>
+            <div class="col-md-11"{% if not user.is_staff %} style="-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; cursor: default;"{% endif %}>
+              {% autoescape off %}
+              {{question.text}}
+              {% endautoescape %}
+            </div>
+          </div>
+          <div class="row">
+            <form id="test_form" method="post">
+              {% csrf_token %}
+              <div id="alabel" class="col-md-1">
+                <h3>A:</h3>
+              </div>
+              <div id="acontent" class="col-md-9">
+                <div class="btn-group" data-toggle="buttons">
+                  <label id="acontent_a" class="btn btn-default">
+                    <input type="radio" name="ans" value="a">
+                    {{question.choices.a|linebreaksbr}}
+                  </label>
+                  <label id="acontent_b" class="btn btn-default">
+                    <input type="radio" name="ans" value="b">
+                    {{question.choices.b|linebreaksbr}}
+                  </label>
+                  <label id="acontent_c" class="btn btn-default">
+                    <input type="radio" name="ans" value="c">
+                    {{question.choices.c|linebreaksbr}}
+                  </label>
+                  <label id="acontent_d" class="btn btn-default">
+                    <input type="radio" name="ans" value="d">
+                    {{question.choices.d|linebreaksbr}}
+                  </label>
+                </div>
+              </div>
+              <div id="asubmit" class="col-md-2">
+                <button id="practicesubmitbtn" type="submit" data-loading-text="Submitting..." class="btn btn-primary btn-block">Submit</button>
+              </div>
+              <input type="hidden" name="qid" value="{{question.id}}">
+            </form>
+          </div>
+          <div id="practicecontentend"></div>
+        </div>
+        <div class="col-lg-3 visible-lg">
+          <div id="practicesidebar" class="panel panel-default">
+            <div class="panel-body">
+              <div>Time Remaining: <div id="test_timer"></div></div>
+              <h5>Topic</h5>
+              <span class="label label-info">{{ question.topic }}</span>
+              <h5>Difficulty</h5>
+              {% if question.difficulty == 5 %}
+              <span class="label label-danger"> Very Difficult</span>
+              {% elif question.difficulty == 4 %}
+              <span class="label label-warning">Difficult</span>
+              {% elif question.difficulty == 3 %}
+              <span class="label label-warning">Average</span>
+              {% elif question.difficulty == 2 %}
+              <span class="label label-success">Easy</span>
+              {% elif question.difficulty == 1 %}
+              <span class="label label-success">Very Easy</span>
+              {% endif %}
+              <h5>Tags</h5>
+              {% if question.tags.all %}
+              {% for tag in question.tags.all %}
+              <span class="label label-default">{{ tag }}</span>
+              {% endfor %}
+              {% else %}
+              <span class="label label-default">No tags yet</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% if debug %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Debug Data <small>(Normally hidden from user)</small>
+        </div>
+        <div class="panel-body">
+          <p>Question: {{question.id}}</p>
+          <p>Answer: {{debug.answer}}</p>
+          <p>Difficulty (1-5): {{question.difficulty}}</p>
+          <p>Current Ability: {{debug.ability}}</p>
+          <p>Item info: {{question.question_info}}</p>
+        </div>
+      </div>
+      {% endif %}
+{% endblock %}

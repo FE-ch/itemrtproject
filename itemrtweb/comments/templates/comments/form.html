@@ -1,0 +1,22 @@
+{% load comments %}
+                      <div id="comment-form-{{ node.id }}" class="comment-form media-body" {% if node.id %}style="display: none"{% endif %}>
+                        <form action="{% comment_form_target %}" method="post" id="comment-form-{{ node.id }}form">
+                          {% csrf_token %}
+                          {# if next #}<input type="hidden" name="next" value="/comments/posted/" />{# endif #}
+                          <input type="hidden" name="parent" id="parent_id" value="{{ node.id }}" />
+                          {{form.content_type}}
+                          {{form.object_pk}}
+                          {{form.timestamp}}
+                          {{form.security_hash}}
+                          <input id="{{form.honeypot.id_for_label}}" class="hide" name="{{form.honeypot.html_name}}" type="text" />
+                          <div class="row">
+                            <div class="col-xs-10">
+                              <textarea id="{{form.comment.id_for_label}}" name="{{form.comment.html_name}}" type="text" class="form-control" rows="3" placeholder="Type your question or comment here"></textarea>
+                              {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
+                            </div>
+                            <div class="col-xs-2">
+                              <button type="submit" name="post" class="submit-post btn btn-primary form-control">Post</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>

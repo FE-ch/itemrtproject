@@ -1,0 +1,35 @@
+{% extends "template.base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+      <div style="margin-top: 30px;">
+          <h1>Practice MCQ Questions</h1>
+
+          <button type="button" class="btn btn-default">You are now practicing questions on <strong>{{topic.name}}</strong></button>
+          </div>
+          <p></p>
+          <form action="/practice/{{topic.id}}/" method="get" class="navbar-form">
+          {% csrf_token %}
+          <div class="well well-small">
+            <h4>Question {{ question.id }}</h4>
+            <pre>{{ question.text }}</pre>
+            <p>Your answer was {% if correct %} correct {% else %} wrong {% endif %}!
+            <br>Question Difficulty : {{ question.difficulty }}
+          </div>
+          <button type="submit" class="btn btn-primary">Try another question</button>
+          </form>
+
+
+        <p style="margin-top: 100px;">For debug purposes:</p>
+        <p>
+          System mode: CAT Learning<br>
+          Total responses: {{debug_qn_attempted}}<br>
+          Question chosen: {{question}}<br>
+          New ability: {{ability}}<br>
+          Ability change: {{ability_change}}<br>
+          {{debug.qnid_post}}<br>
+          {{debug.qnid_session}}<br>
+        </p>
+      </div>
+{% endblock %}

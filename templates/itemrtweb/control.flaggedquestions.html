@@ -1,0 +1,25 @@
+{% extends "itemrtweb/control-empty.html" %}
+
+{% block control-content %}
+            <h2>Flagged Questions</h2>
+            <div class="panel panel-default">
+              <table class="table table-striped panel-body">
+                <thead>
+                  <th>Report ID</th>
+                  <th>Question ID</th>
+                  <th>User</th>
+                  <th>Issue</th>
+                </thead>
+                <tbody>
+                  {% for flag in flagged_qns %}
+                  <tr>
+                    <td>{{ flag.id }}</td>
+                    <td><a href="/prototype/preview/question/{{ flag.question.id }}/">{{ flag.question.id }}</a></td>
+                    <td title="Email: {{user.email}}">{{ flag.user.get_full_name }}</td>
+                    <td>{{ flag.issue }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+{% endblock %}

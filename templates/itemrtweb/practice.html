@@ -1,0 +1,39 @@
+{% extends "template.base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+      <div style="margin-top: 30px;">
+          <h1>Practice MCQ Questions</h1>
+
+          <button type="button" class="btn btn-default">You are now practicing questions on <strong>{{topic.name}}</strong></button>
+          <p></p>
+          <form action="/practice/{{topic.id}}/" method="post" class="navbar-form">
+          {% csrf_token %}
+          <div>
+            <h4>Question {{ question.id }}</h4>
+            <div>{{ question.text|linebreaksbr }}</div>
+            {% for ansid, ansval in question.choices.items %}
+            <label class="radio control-label">
+              <input type="radio" name="ans" value="{{ ansid }}">
+              {{ ansval|linebreaksbr }}
+            </label>
+            {% endfor %}
+            <input type="hidden" name="qid" value="{{ question.id }}">
+            <button type="submit" class="btn btn-primary">Submit Answer</button>
+            <br>Question Difficulty : {{ question.difficulty }}
+          </div>
+          </form>
+
+
+        <p style="margin-top: 100px;">For debug purposes:</p>
+        <p>
+          System mode: {{debug}}<br>
+          Total responses: {{debug_qn_attempted}}<br>
+          Question chosen: {{question}}<br>
+          Current ability: {{ability}}<br>
+          Item info:<br>
+          {{question.question_info}}
+        </p>
+      </div>
+{% endblock %}

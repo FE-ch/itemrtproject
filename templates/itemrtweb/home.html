@@ -1,0 +1,44 @@
+{% extends "template.base.html" %}
+{% load staticfiles %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+      <div class="well">
+        <h1>Hello there! <small class="pull-right">{{ PROJECT_NAME }} v1.0</small></h1>
+        <p>Our system consists of 3 modes where you can help yourself to revise and practice on C Programming. <br><strong>We hope that this will be useful for revision and reinforcing your knowledge learnt in CZ/CE1007.</strong></p>
+        <p>Take a <strong><a href="/survey/">User Survey</a></strong> now to give your suggestions!</p>
+      </div>
+      <div class="row row-thumbnail">
+        <div class="col-sm-4">
+          <div class="thumbnail">
+            <img src="{% static '/static/images/practice.png' %}" alt="Exercises">
+            <div class="caption">
+              <h3>Exercises</h3>
+              <p><strong>Exercises</strong> is where you can take your own time to practice and work in individual MCQ questions of different topics. <strong>No time limit!</strong> The difficulty of questions is <strong>adaptive to your current knowledge level</strong>, so we won't give you questions that are too hard or too easy!</p>
+              <div class="text-right"><a href="/practice/" class="btn btn-primary" role="button">Go to Exercises</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="thumbnail">
+            <img src="{% static '/static/images/trialtest.png' %}" alt="CAT Test">
+            <div class="caption">
+              <h3>CAT Test</h3>
+              <p><strong>CAT Test</strong> stands for Computerized Adaptive Tests. In this mode each question is given <strong>5 minutes</strong>, and your next question will depend on the previous questions' correctness. A good place to do a timed practice of what you know! MCQ Based.</p>
+              <div class="text-right"><a href="/trialtest/" class="btn btn-primary" role="button">Go to CAT Test</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="thumbnail">
+            <img src="{% static '/static/images/labtest.png' %}" alt="Paper Test">
+            <div class="caption">
+              <h3>Paper Test</h3>
+              <p><strong>Paper Test</strong> are the hardest! Similar to an exam, questions are fill-in-the-blank of output type, so you would have to analyze the whole output of code carefully. Each question is only given 3 minutes, so time is a crucial factor.</p>
+              <div class="text-right"><a href="/papertest/" class="btn btn-primary" role="button">Go to Paper Test</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}

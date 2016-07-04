@@ -1,0 +1,21 @@
+
+\documentclass{article}
+\usepackage[hmargin=1.5cm,vmargin=1.5cm]{geometry}
+\newcommand{\questionheader}[1]{\paragraph{#1}\mbox{}\\}
+\title{Questions on Control Structure}
+
+\begin{document}
+\maketitle
+
+{% for question in questions %}
+
+\newpage
+\questionheader{Question {{question.id}}}
+\begin{verbatim}
+{{question.text|safe}}
+{{question.choices|safe}}}
+\end{verbatim}
+
+{% endfor %}
+
+\end{document}

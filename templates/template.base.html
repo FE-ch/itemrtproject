@@ -1,0 +1,130 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{{ PROJECT_NAME }} | {% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}?20140217" media="screen">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}?20140217">
+    <link rel="stylesheet" href="{% static 'css/itemrtweb.css' %}?20140217">
+    {% block extrastyle %}
+    {% endblock %}
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="{% static 'js/html5shiv.js' %}"></script>
+      <script src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
+
+    {% block extrahead %}
+    {% endblock %}
+    {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+  </head>
+  <body>
+    <div id="mainnavbar" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">C Language <div style="color: #428BCA; font-size: 14px;">Knowledge Testing System</div><div style="color: #428BCA; font-size: 14px; display: none;">Adaptive Educational System</div></a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+            {% if not user.is_authenticated %}
+            <li><a href="#about">About</a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li><a href="/practice/"><span class="glyphicon glyphicon-pencil"></span> Exercises</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-book"></span> Tests</a>
+              <ul class="dropdown-menu">
+                <li><a href="/cattest/">CAT Test</a></li>
+                <li><a href="/papertest/">Paper Test</a></li>
+                <!--
+                <li class="divider"></li>
+                <li><a href="/papertest/">Test Specification <small class="text-warning">(Beta)</small></a></li>
+                <li><a href="#">Test Results <small class="text-danger">(Under Construction)</small></a></li>
+                -->
+              </ul>
+            </li>
+            <li><a href="/search/"><span class="glyphicon glyphicon-search"></span> Tag Search</a></li>
+            <li><a href="/survey/"><span class="glyphicon glyphicon-bullhorn"></span> User Survey</a></li>
+            {% endif %}
+            {% if user.is_staff %}
+            <li><a href="/control/"><span class="glyphicon glyphicon-wrench"></span> Control Panel</a></li>
+            {% endif %}
+            {% if user.is_superuser %}
+            <li><a href="/admin/"><span class="glyphicon glyphicon-wrench"></span> Db Admin</a></li>
+            {% endif %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            {## Show user name and profile ##}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.get_full_name }}</a>
+              <ul class="dropdown-menu">
+                <!--<li><a href="#">Change Password</a></li>
+                <li class="divider"></li>-->
+                <li><a href="/accounts/logout/">Sign Out</a></li>
+              </ul>
+            </li>
+            {% else %}
+            {## Show register and sign in menus ##}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In</a>
+              <ul class="dropdown-menu nav-login">
+                <li class="nav-login-content">
+                  <form action="/accounts/login/" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="loginInputEmail">Email address</label>
+                      <input type="text" class="form-control" id="loginInputEmail" name="username" placeholder="Enter NTU email">
+                    </div>
+                    <div class="form-group">
+                      <label for="loginInputPassword">Password</label>
+                      <input type="password" class="form-control" id="loginInputPassword" name="password" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                  </form>
+                </li>
+                <li class="divider"></li>
+                <li class="nav-login-content">New user? <span><a href="/accounts/register/">Start here.</a></span></li>
+            </li>
+            {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+      {% block content %}
+      <div class="jumbotron">
+        <h1>Hello! 你好!</h1>
+        <h2>Welcome to {{ PROJECT_NAME }}</h2>
+        <br>
+        <p>An academic project of a final year student. We hope this provides you juniors with a conducive and enjoyable environment to learn and practice on what you have learnt!</p>
+        <p><a class="btn btn-success btn-lg" role="button" href="/accounts/register/">Register Now!</a></p>
+      </div>
+      {% endblock %}
+    </div><!-- /.container -->
+
+    {% block scripts %}
+    <script src="{% static 'js/jquery-1.10.2.min.js' %}"></script>
+    <script src="{% static 'js/jquery.plugin.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/chart.min.js' %}"></script>
+    <script src="{% static 'js/run_prettify.js' %}"></script>
+    <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+    <script src="{% static 'js/itemrtweb.js' %}"></script>
+    {% endblock %}
+  </body>
+</html>

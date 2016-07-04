@@ -1,0 +1,161 @@
+{% extends "template.base.html" %}
+
+{% load itemrtfilter %}
+
+{% block title %}Paper Test{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+    $(document).ready(function() {
+      /* Bind save button to save answer data */
+      $(".btn-answer-save:button").bind("click", saveAnswer);
+      /* Bind form field to save answer data */
+      $(".form-answer-field:input").bind("blur", saveAnswer);
+
+      /* AJAX time retrival for tests */
+      if($('#test_timer').length) {
+        /* Find test ID and get test ending time from server */
+        test_id = $('#test_id').text();
+        var request = $.ajax({
+          url: "/papertest/"+test_id+"/getendtime/",
+          cache: false
+        })
+
+        request.done(function(msg) {
+          var enddate = new Date(msg);
+
+          $('#test_timer').countdown({until: enddate, compact: true, format: 'HMS', description: '', alwaysExpire: true, onExpiry: testExpired});
+        });
+      };
+    });
+
+    function saveAnswer() {
+      var question_form = $(this).closest("form");
+      var save_button = question_form.find(".btn-answer-save");
+
+      /* Jquery ajax save */
+      save_button.button('saving');
+      var request = $.ajax({
+        type: question_form.attr('method'),
+        url: question_form.attr('action'),
+        data: question_form.serialize(),
+        cache: false
+      });
+      request.done(function(data) {
+        save_button.button('saved');
+        save_button.toggleClass("btn-primary btn-success");
+
+        setTimeout(function() {
+          save_button.toggleClass("btn-success btn-primary");
+        }, 3000);
+      });
+      request.fail(function(jqXHR, textStatus) {
+        alert("Request failed: " + textStatus);
+      });
+    }
+
+    function testExpired() {
+      alert("Time's up! Your test will be automatically submitted now.");
+
+      var test_form = $("#test_form");
+      test_form.submit();
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-lg-12">
+          <h1>Paper Test <small class="pull-right">Test ID: <span id="test_id">{{ test.id }}</span></small></h1>
+        </div>
+      </div>
+      <div id="contentrow" class="row">
+        <div class="col-md-3">
+         <div class="bs-sidebar" data-spy="affix" data-offset-top="75">
+            <form id="test_form" method="post" action ="/papertest/submit/{{ test.id }}/">
+              {% csrf_token %}
+              <ul class="nav bs-sidenav">
+                  <li><div>Time Remaining: <div id="test_timer"></div></div></li>
+                  <li id="nav_questions">
+                    <a href="#">Questions</a>
+                    <ul class="nav">
+                      {% for question in test.questions.all %}
+                      <li><a href="#question-{{ forloop.counter }}">Question {{ forloop.counter }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                  <li>
+                    <div>
+                      <button id="btn-papertest-submit" type="submit" class="btn btn-danger" style="width: 100%;" data-submitting-text="Submitting">Save and Submit Test</button>
+                    </div>
+                  </li>
+              </ul>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-9">
+          {% for question in test.questions.all %}
+          <div class="multiquestion-row">
+            <div id="question-{{ forloop.counter }}" class="anchor"></div>
+            <div class="row">
+              <div id="qlabel" class="col-md-1">
+                <h3>Q{{ forloop.counter }}:</h3>
+              </div>
+              <div class="col-md-11"{% if not user.is_staff %} style="-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; cursor: default;"{% endif %}>
+                {% autoescape off %}
+                {{ question.text|formatquestionforweb }}
+                {% endautoescape %}
+              </div>
+            </div>
+            <div class="row">
+              <form method="post" action="/papertest/{{ test.id }}/save/">
+                {% csrf_token %}
+                <input type="hidden" name="qn_id" value="{{ question.id }}">
+                <div id="alabel" class="col-md-1">
+                  <h3>A:</h3>
+                </div>
+                <div id="acontent" class="col-md-9">
+                  <textarea class="form-control form-answer-field" name="answer" placeholder="Your answer" rows="3" >{% for response in test.responses.all %}{% if response.question == question %}{{ response.response }}{% endif %}{% endfor %}</textarea>
+                </div>
+                <div id="asubmit" class="col-md-2">
+                  <button id="papertestquestion-{{ forloop.counter }}" type="button" data-saving-text="Saving..." data-saved-text="Saved" class="btn btn-primary btn-block btn-answer-save">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+      {% if debug %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Debug Data <small>(Normally hidden from user)</small>
+        </div>
+        <div class="panel-body">
+          <p>Question: {{question.id}}</p>
+          <p>Difficulty (1-5): {{question.difficulty}}</p>
+          <p>Current Ability: {{debug.ability}}</p>
+          <p>Item info: {{question.question_info}}</p>
+        </div>
+      </div>
+      {% endif %}
+{% endblock %}

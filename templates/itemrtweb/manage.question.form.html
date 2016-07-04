@@ -1,0 +1,140 @@
+{% extends "template.base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}Insert/Edit Question{% endblock %}
+
+{% block extrastyle %}
+    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/tagit.ui-zendesk.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/jquery-ui-1.10.4.custom.min.js' %}"></script>
+    <script src="{% static 'js/tag-it.js' %}"></script>
+    <script type="text/javascript">
+    var retrievedTags = [{% for item, value in form.tags.field.choices %}'{{ value }}'{% if not forloop.last %},{% endif %}{% endfor %}];
+
+    $(document).ready(function() {
+      $('#{{ form.tags.id_for_label }}').tagit({
+        availableTags: retrievedTags,
+        allowSpaces: true,
+        autocomplete: {delay: 0}
+      });
+
+      $('.toolbox-btn').on("click", function(){
+        var qn = $('#{{ form.content.id_for_label }}')
+        qn.focus();
+        qn.val(qn.val() + "Sample question text\n\n\\begin{code}\nprintf('sample');\n\\end{code}\n\nA. Answer 1\nB. Answer 2\nC. Answer 3\nD. Answer 4");
+        qn.val = qn.val;
+        qn.scrollTop(999999);
+      });
+    });
+    </script>
+{% endblock %}
+
+{% block content %}
+      <h1>{% if selected_question %}Edit Question{% else %}Insert Question{% endif %}</h1>
+      {% if saved %}<div class="alert alert-success">Question has been successfully saved.</div>{% endif %}
+      {% if form.errors %}
+      <div class="alert alert-danger">
+        {{ form.errors.as_text }}
+      </div>
+      {% endif %}
+      <form class="form-basic" method="post" role="form">
+        {% csrf_token %}
+        <div class="row form-group">
+          <div class="col-sm-6">
+            <label for="{{ form.topic.id_for_label }}">Topic</label>
+            <div class="row">
+              <div class="col-xs-11">
+                <select id="{{ form.topic.id_for_label }}" name="{{ form.topic.html_name }}" class="form-control">
+                  {% for topic in form.topics %}
+                  <option value="{{ topic.id }}"{% if topic.id == form.topic.value|add:0 %} selected{% endif %}>{{ topic.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="control-label col-xs-1">
+                <a href="#" title="Add Topic"><span class="glyphicon glyphicon-plus text-muted"></span></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label for="inputEmail3">Subtopic</label>
+            <div class="row">
+              <div class="col-xs-11">
+                <select class="form-control">
+                  <option disabled selected></option>
+                </select>
+              </div>
+              <div class="form-control-static col-xs-1">
+                <a href="#" title="Add Subtopic"><span class="glyphicon glyphicon-plus text-muted"></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 form-group{% if form.difficulty.errors %} has-error{% endif %}">
+            <label for="{{ form.difficulty.id_for_label }}">Difficulty</label>
+            <input type="text" id="{{ form.difficulty.id_for_label }}" name="{{ form.difficulty.html_name }}" class="form-control" placeholder="Values: 1 to 5" value="{{ form.difficulty.value|default_if_none:'' }}">
+          </div>
+          <div class="col-sm-4">
+            <label for="inputEmail3">Time</label>
+            <input type="text" class="form-control" id="???" placeholder="Optional, Default: 0 (minutes)"{% if qustion.time != 0 %} value="{{ selected_question.time }}"{% endif %}>
+          </div>
+          <div class="col-sm-4">
+            <label for="inputEmail3">Marks</label>
+            <input type="text" class="form-control" id="???" placeholder="Optional, Default: 1.0" value="{{ selected_question.marks }}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group{% if form.content.errors %} has-error{% endif %}">
+              <label for="{{ form.content.id_for_label }}">Question</label>
+              <textarea class="form-control" id="{{ form.content.id_for_label }}" name="{{ form.content.html_name }}" rows="20" placeholder="Question content including MCQ options">{{ form.content.value|default_if_none:'' }}</textarea>
+            </div>
+            <div class="form-group">
+              <label for="{ form.tags.id_for_label }}">Tags</label>
+              <ul id="{{ form.tags.id_for_label }}" class="tagsinput">
+                {% for tag in form.tags.value %}<li>{{ tag }}</li>{% endfor %}
+              </ul>
+              <small>It is currently only possible to choose tags from the given list, please seperate tags with a comma</small>
+            </div>
+            <div class="form-group{% if form.answer.errors %} has-error{% endif %}">
+              <label for="{{ form.answer.id_for_label }}">Answer</label>
+              <input type="text" id="{{ form.answer.id_for_label }}" name="{{ form.answer.html_name }}" class="form-control" placeholder="MCQ option (A/B/C/D)" value="{{ form.answer.value|default_if_none:'' }}">
+            </div>
+            <div class="form-group{% if form.solution.errors %} has-error{% endif %}">
+              <label for="{{ form.solution.id_for_label }}">Explanation</label>
+              <textarea id="{{ form.solution.id_for_label }}" name="{{ form.solution.html_name }}" class="form-control" rows="10" placeholder="Optional">{{ form.solution.value|default_if_none:'' }}</textarea>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div id="edit-question-toolbox" data-spy="affix" data-offset-top="220">
+              <label>Toolbox</label>
+              <div class="well well-sm" style="min-height: 350px;">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#toolbox-code" data-toggle="tab">Code</a></li>
+                  <!--<li><a href="#toolbox-maths" data-toggle="tab">Maths</a></li>-->
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="toolbox-code">
+                    <span class="toolbox-btn label label-default" style="cursor: pointer;">Sample Question Structure</span>
+                  </div>
+                  <div class="tab-pane" id="toolbox-maths">To be added later</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-xs-12">
+            <div class="well">
+              {% if selected_question %}<button type="submit" class="btn btn-primary">Save Changes</button>{% else %}<button type="submit" class="btn btn-primary">Insert Question</button>{% endif %}
+              <a href="#" onclick="history.back(); return false;" class="btn btn-danger">Cancel</a>
+            </div>
+          </div>
+        </div>
+      </form>
+{% endblock %}

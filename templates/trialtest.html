@@ -1,0 +1,64 @@
+{% extends "template.base.html" %}
+
+{% block title %}CAT Test{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-md-12 col-lg-10 col-lg-offset-1">
+          <h1>CAT Test</h1>
+          {% if complete %}
+          <div class="alert alert-success">
+            <p>You have completed the previous test with ability score of <strong>{{ ability|floatformat:"0"  }}</strong>.</p>
+            <p style="color: #DFF0D8;">Test ended due to terminating condition {{ debug }}.</p>
+            <canvas id="cattest_results" width="600" height="300"></canvas>
+          </div>
+          {% endif %}
+          <blockquote>
+            <p>Pick a topic and begin a CAT test to know your ability score!</p>
+            <small>CAT Tests are generated dynamically based on responses that a user gives on previous questions. <!--<a href="#">Learn more</a>--></small>
+          </blockquote>
+          <form class="form-horizontal" method="post" role="form" action="/trialtest/generate/">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="{{ form.username.id_for_label }}" class="col-sm-3 control-label">Topic</label>
+              <div class="col-sm-6">
+                <select class="form-control" name="topic">
+                  <option value="0">All Topics</option>
+                  {% for topic in topics %}
+                  <option value="{{ topic.id }}">{{ topic.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-6 col-sm-offset-3 ">
+                <button type="submit" class="btn btn-primary">Begin CAT Test</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      {# Code for injecting charts into page #}
+      {% if complete %}
+      <script>
+        function loadChart(jQuery) {
+          console.log( "ready!" );
+          var test_data = {
+            labels : [{% for ability in ability_list %}{{ forloop.counter }}{% if not forloop.last %},{% endif %}{% endfor %}],
+            datasets : [
+              {
+                fillColor : "rgba(172,194,132,0.4)",
+                strokeColor : "#ACC26D",
+                pointColor : "#fff",
+                pointStrokeColor : "#9DB86D",
+                data : [{% for ability in ability_list %}{{ ability|floatformat:"0" }}{% if not forloop.last %},{% endif %}{% endfor %}]
+              }
+            ]
+          }
+
+          var cattest_results = document.getElementById('cattest_results').getContext('2d');
+          new Chart(cattest_results).Line(test_data);
+        }
+      </script>
+      {% endif %}
+{% endblock %}

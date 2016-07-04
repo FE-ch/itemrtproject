@@ -1,0 +1,38 @@
+{% extends "template.base.html" %}
+
+{% block title %}Reset Password{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-md-12 col-lg-10 col-lg-offset-1">
+          <h1>Reset Password</h1>
+          <blockquote>
+            <p>To reset your password, please enter the email address that was used to register.</p>
+          </blockquote>
+          {% if form.errors %}
+          <div class="alert alert-danger">
+            <strong>Sorry!</strong> There {{ form.errors|pluralize:"is an,are" }} error{{ form.errors|pluralize }} in the form. Please rectify them and resubmit.
+          </div>
+          {% endif %}
+          <form class="form-horizontal" method="post" role="form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+              <label for="{{ form.email.id_for_label }}" class="col-sm-3 control-label">Email</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" placeholder="Your NTU Email (@e.ntu.edu.sg)" value="{{ form.email.value|default_if_none:'' }}" maxlength="{{ form.email.field.max_length }}">
+              </div>
+              <div class="col-sm-3">
+                {{ form.email.errors }}
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-6 col-sm-offset-3 ">
+                <button type="submit" id="register_btn" class="btn btn-primary" data-loading-text="Resetting...">Reset Password</button>
+                <a class="btn btn-default" href="/">Cancel</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+{% endblock %}

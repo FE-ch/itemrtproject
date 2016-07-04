@@ -1,0 +1,73 @@
+{% extends "template.base.html" %}
+
+{% block title %}Control Panel{% endblock %}
+
+{% block content %}
+      <div>
+        <h1>Control Panel</h1>
+        <br>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="panel panel-primary">
+              <div class="panel-heading dropdown">
+                <div class="panel-title">
+                  C Programming
+                </div>
+              </div>
+                <ul class="nav nav-stacked nav-compact">
+                  <li class="nav-header"></li>
+                  <li><a href="/prototype2/"><strong>Question Management</strong></a></li>
+                  <li class="nav-header">Misc.</li>
+                  <li><a href="/control/flaggedqn/">Flagged Questions</a></li>
+                  <li class="nav-header">CAT Test</li>
+                  <li><a href="/control/cattest/settings/">Test Settings</a></li>
+                </ul>
+            </div>
+          </div>
+          <div class="col-md-9">
+            {% block control-content %}
+            <div class="alert alert-info">Please select an option from the left</div>
+            <div class="panel panel-default">
+              <div class="panel-heading">System Updates</div>
+              <div class="panel-body">
+                <div >
+                  <h5>Version 2014.02.21 <span style="color: #d9534f">(New!)</span></h5>
+                  <ul>
+                    <li>CAT Test is now installed with a timer. (5 mins per question)</li>
+                    <li>Paper Test save button set to green upon save.</li>
+                    <li>All tests will automatically submit when time is up.</li>
+                  </ul>
+                </div>
+                <div >
+                  <h5>Version 2014.02.20</h5>
+                  <ul>
+                    <li>Users can now report a problem with the question with Flag Question</li>
+                    <li>Staff can test the question's output mode using Preview button</li>
+                    <li>Topics are now sorted in order</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5>Version 2014.02.17</h5>
+                  <ul>
+                    <li>Filter by Difficulty is now supported</li>
+                    <li>Additional Topics</li>
+                    <li>Sorting for tags to alphabetical order</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5>Version 2014.02.14</h5>
+                  <ul>
+                    <li>Delete and removal of questions is now supported</li>
+                    <li>Tag search available for staff users</li>
+                    <li>Toolbox bug fixed</li>
+                    <li>Staff can select parts of the question to copy and paste (but not users)</li>
+                    <li>Minor bug fixes</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+{% endblock %}

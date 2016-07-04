@@ -1,0 +1,5 @@
+{% extends "itemrtweb/control-empty.html" %}
+
+{% block control-content %}
+Control Panel
+{% endblock %}

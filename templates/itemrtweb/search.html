@@ -1,0 +1,104 @@
+{% extends "template.base.html" %}
+
+{% load staticfiles itemrtfilter %}
+
+{% block title %}List Questions{% endblock %}
+
+{% block extrastyle %}
+    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/tagit.ui-zendesk.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/jquery-ui-1.10.4.custom.min.js' %}"></script>
+    <script src="{% static 'js/tag-it.js' %}"></script>
+    <script type="text/javascript">
+    var retrievedTags = [{% for tag in all_tags %}'{{ tag.name }}'{% if not forloop.last %},{% endif %}{% endfor %}];
+
+    $(document).ready(function() {
+      $('#tagssearch').tagit({
+        availableTags: retrievedTags,
+        allowSpaces: true,
+        autocomplete: {delay: 0}
+      });
+    });
+    </script>
+{% endblock %}
+
+{% block content %}
+      <div id="practice_home" class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+          <h1>Tag Search</h1>
+          <div>
+            <form>
+              <div class="form-group row">
+                <div class="col-xs-10">
+                  <ul id="tagssearch">
+                  </ul>
+                </div>
+                <div class="col-xs-2">
+                  <button type="submit" class="btn btn-success form-control">Search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              {% if request.GET.msg %}
+              <div id="list-question-alert" class="alert alert-success" data-spy="affix" data-offset-top="80"><strong>{{ request.GET.msg }}</strong></div>
+              {# Filtering Questions with Tags #}
+              {% elif tags %}
+              <div class="alert{% if questions %} alert-success{% else %} alert-danger{% endif %}"><strong>{{ questions.paginator.count }}</strong> questions with tag: {% for tag in tags %}{{ tag }} {% endfor %}</div>
+              {# Nothing filtered #}
+              {% else %}
+              <div class="alert alert-info">Enter one or more search terms to begin search</div>
+              {% endif %}
+              <div>
+                <ul class="pager">
+                  {% if questions.paginator.count > 0 %}
+                  <li><a href="#">Page {{ questions.number }} of {{ questions.paginator.num_pages }}</a></li>
+                  {% endif %}
+                  {% if questions.has_previous %}
+                  <li><a href="{{ request.path|add:querystring }}&page={{ questions.previous_page_number }}">&laquo;</a></li>
+                  {% endif %}
+                  {% for page in questions.paginator.page_range %}
+                  <li><a href="{{ request.path|add:querystring }}&page={{ page }}">{{ page }}</a></li>
+                  {% endfor %}
+                  {% if questions.has_next %}
+                  <li><a href="{{ request.path|add:querystring }}&page={{ questions.next_page_number }}">&raquo;</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+              {% for question in questions %}
+              <div class="row" style="padding-bottom: 20px;">
+                <div id="question-{{ question.id }}" class="anchor"></div>
+                <div id="qlabel" class="col-md-12">
+                  <h3>Question {{ question.id }}</h3>
+                </div>
+                <div id="qdata" class="col-md-12" style="padding-bottom: 10px;">
+                  {% if question.difficulty == 5 %}
+                  <span class="label label-danger">Difficulty: Very Difficult</span>
+                  {% elif question.difficulty == 4 %}
+                  <span class="label label-warning">Difficulty: Difficult</span>
+                  {% elif question.difficulty == 3 %}
+                  <span class="label label-warning">Difficulty: Average</span>
+                  {% elif question.difficulty == 2 %}
+                  <span class="label label-success">Difficulty: Easy</span>
+                  {% elif question.difficulty == 1 %}
+                  <span class="label label-success">Difficulty: Very Easy</span>
+                  {% endif %}
+                  {% for tag in question.tags.all %}<a href="/search/?tags={{ tag.name }}" class="label label-info">Tag: {{ tag.name }}</a> {% endfor %}
+                </div>
+                <div class="col-md-12" {% if not user.is_staff %} style="-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; cursor: default;"{% endif %}>
+                  {% autoescape off %}
+                  {{ question.text|formatquestionforweb }}
+                  {% endautoescape %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}

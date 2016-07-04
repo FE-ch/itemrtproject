@@ -1,0 +1,36 @@
+{% extends "itemrtweb/control-empty.html" %}
+
+{% block control-content %}
+            <h2>CAT Test Settings</h2>
+            <div>
+              <form role="form" class="col-sm-6" method="post" onsubmit="confirm('The weightage setting that you have set may not be effective as it exceeds the Max Questions Terminating Condition.\n\nTo resolve this, you can:\n    1. Lower the total weightage of all questions such that it is lesser than Maximum Questions, or\n    2. Increase the Max Questions Terminating Condition.\n\n Otherwise, are you sure you want to continue?');">
+                {% csrf_token %}
+                {% for topic in topics %}
+                <div class="form-group">
+                  <label for="newtestNumOfQns">Weightage for {{ topic }}</label>
+                  <input type="text" class="form-control" name="newtestNumOfQns" id="newtestNumOfQns" placeholder="1">
+                </div>
+                {% endfor %}
+                <div class="form-group">
+                  <label for="newtestNumOfQns">Initial Ability</label>
+                  <input type="text" class="form-control" id="ignore" placeholder="50">
+                </div>
+                <div class="form-group">
+                  <label for="newtestNumOfQns">Terminating Condition: Standard Error</label>
+                  <input type="text" class="form-control" id="ignore" placeholder="0.33">
+                </div>
+                <div class="form-group">
+                  <label for="newtestNumOfQns">Terminating Condition: Max Questions</label>
+                  <input type="text" class="form-control" id="ignore" placeholder="10">
+                </div>
+                <div class="form-group">
+                  <label for="newtestNumOfQns">Terminating Condition: Max/Min Infinity Ability Tries</label>
+                  <input type="text" class="form-control" id="ignore" placeholder="4">
+                </div>
+                <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+                </div>
+              </form>
+            </div>
+
+{% endblock %}

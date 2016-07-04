@@ -1,0 +1,355 @@
+/* Lato Font
+@import url(http://fonts.googleapis.com/css?family=Lato:400,300,400italic,700,700italic); */
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,700,700italic);
+
+/* Countdown timer css*/
+@import url(jquery.countdown.css);
+
+body {
+  padding-top: 90px;
+  padding-bottom: 50px;
+  overflow-y:scroll;
+  /* Chrome Font Smoothening */
+  -webkit-text-stroke: 0.25px rgba(0,0,0,0.1)
+}
+
+h1 {
+  border-bottom: solid 1px #DDD;
+  padding-bottom: 10px;
+  margin-top: 5px;
+}
+
+.nav-login {
+  min-width: 300px;
+}
+
+.nav-login-content {
+  padding: 8px 15px;
+}
+
+@media (max-width: 767px) {
+  .nav-login-content label {
+    color: #FFF;
+  }
+}
+
+/* Displays blue line in navbar and blockquotes */
+#mainnavbar {
+  border-bottom: 5px #428BCA solid;
+}
+blockquote {
+  border-left-color: #428BCA;
+}
+
+/* Displays light blue line on hover at navbar links */
+@media (min-width: 768px) {
+  #mainnavbar .navbar-nav > li > a:hover,
+  #mainnavbar .navbar-nav > li > a:focus {
+    border-bottom: 5px #5BC0DE solid;
+    margin-bottom: -5px;
+  }
+}
+
+#mainnavbar .dropdown-menu {
+  margin-top: 5px;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #DDD;
+}
+
+.nav-header {
+  padding: 15px 15px 0px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.428571429;
+  color: #999999;
+}
+
+.nav-compact > li > a {
+  padding: 5px 15px;
+}
+.nav-compact > li:last-child > a {
+  margin-bottom: 10px;
+}
+
+/* Registration form styling */
+.form-control#id_first_name {
+  width: 64%;
+  display: inline;
+}
+.form-control#id_last_name {
+  width: 34%;
+  display: inline;
+}
+
+/* Extra padding for bottom of rows in thumbnails */
+.row-thumbnail > div{
+  padding-bottom: 15px;
+}
+
+/* Section heading for thumbnail descriptors */
+.thumbnail-section {
+  font-size: 10pt;
+  color: #999999;
+}
+
+/* Clear margin on h3  in q/alabel */
+#qlabel > h3, #alabel > h3, #sollabel > h3, #discusslabel > h3, #discusscontent > h3, #discusscontent > h5 {
+  margin-top: 0;
+}
+
+/* Row spacing on sol/discussrows */
+#contentrow, #solrow, #discussrow {
+  margin-bottom: 20px;
+}
+
+/* Full width buttons (for answering questions) */
+#acontent > .btn-group {
+  width: 100%;
+}
+
+#acontent label {
+  width: 25%;
+  text-align: left;
+}
+
+/* Sidebar bgcolor, and no bottom margin */
+#practicesidebar {
+  background-color: #F5F5F5;
+  margin-bottom: 0px;
+}
+
+/* Wrap all labels (ugly!) */
+.label {
+  white-space: normal;
+}
+
+/* Prettyprint reset css */
+pre.prettyprint {
+  border: 1px solid #ccc !important;
+  margin-bottom: 0 !important;
+  padding: 9.5px !important;
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+  background-color: #FFF !important;
+}
+
+li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
+  list-style-type: decimal !important;
+}
+
+li.L1, li.L3, li.L5, li.L7, li.L9 {
+  background-color: #F5F5F5 !important;
+}
+
+/* Progress bar text shrinkage */
+.progress-bar {
+  font-size: 12px;
+}
+
+/* Set opacity for practice answers */
+#acontent .disabled {
+  opacity: 1;
+}
+
+/* Set text wrapping to normal in buttons choices of questions */
+#acontent .btn {
+  white-space: normal;
+}
+
+/* Margin change for header in practice home */
+#practice_home .caption h3 {
+  margin-top: 5px;
+}
+
+/* Back to rounded borders for buttons! */
+.btn {
+  border-radius: 3px;
+}
+
+/* Discussion content css */
+.comment-content {
+  min-height: 60px;
+}
+#discusscontent .media {
+  /*padding-bottom: 20px;*/
+}
+.comment-children {
+  margin-left: 50px;
+}
+
+.comment-children div > .comment-children div > .comment-children div > .comment-children div {
+  margin-left: 0px;
+}
+
+/* Multi questions in a page, space them out */
+div.multiquestion-row {
+  padding-bottom: 100px;
+}
+
+/* Annoying issue with h1, small and pulling right */
+h1 small.pull-right {
+  margin-top: 12px;
+}
+
+/* Bootstrap sidebar css styling */
+.bs-sidenav {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #ebf2f9;
+  border-radius: 3px;
+}
+
+.bs-sidebar.affix {
+  position: fixed;
+  top: 80px;
+}
+
+.bs-sidebar .nav > li > a {
+    display: block;
+    color: #428BCA;
+    padding: 5px 20px;
+}
+
+.bs-sidebar .nav > li > div {
+    display: block;
+    padding: 5px 20px;
+}
+
+.bs-sidebar .nav .nav > li > a {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 30px;
+    font-size: 90%;
+}
+
+.bs-sidebar .nav > .active > a, .bs-sidebar .nav > .active:hover > a, .bs-sidebar .nav > .active:focus > a {
+    font-weight: bold;
+    color: #428BCA;
+    background-color: transparent;
+    border-right: 1px solid #428BCA;
+}
+
+@media (min-width: 992px) {
+  .bs-sidebar.affix {
+      width: 212px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .bs-sidebar.affix {
+      width: 262px;
+  }
+}
+
+/* Affix for toolbox */
+#edit-question-toolbox.affix {
+  position: fixed;
+  top: 82px;
+  width: 555px;
+}
+
+/* Affix for question list filter */
+#list-question-filter.affix {
+  position: fixed;
+  top: 82px;
+  width: 263px;
+}
+
+/* Affix for information notice (alert) */
+#list-question-alert.affix {
+  position: fixed;
+  top: 82px;
+  z-index: 10;
+  width: 848px;
+}
+
+/* Special class anchor for offset from top of page */
+.anchor {
+  position: relative;
+  top: -80px;
+}
+
+/* Navbar font modifications + padding */
+.navbar-brand {
+  padding-top: 12px;
+  padding-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav > li > a {
+    padding-top: 12px;
+    padding-bottom: 10px;
+    line-height: 40px;
+  }
+}
+
+/* Navbar dropdown extra padding */
+.dropdown-menu > li > a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+/* Form Control appearance */
+select.form-control {
+  padding-right: 6px;
+}
+
+/* form-basic */
+.form-basic .control-label, .form-basic .radio, .form-basic .checkbox, .form-basic .radio-inline, .form-basic .checkbox-inline, .form-basic .form-control-static {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 7px;
+}
+
+/* Tabpane in toolbox */
+#edit-question-toolbox .tab-pane, #list-question-filter .tab-pane {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* Reduce margin for tagsinput ul box */
+ul.tagsinput {
+  margin-bottom: 0px;
+}
+
+/* Searchbox at navbar */
+.nav-search {
+  width: 100px;
+  background-color: #222;
+  border: 1px solid #222;
+  color: #999;
+}
+
+.nav-search:focus {
+  background-color: #999;
+  color: #222;
+}
+
+/* Formatting for panel text inside panel-filter */
+.panel-filter a {
+  line-height: 2.5;
+}
+
+.panel-filter h5 {
+  margin-top: 0px;
+}
+
+.panel-filter {
+  box-shadow: none;
+  margin-top: 8px;
+}
+
+.label-white {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  color: #333;
+  font-weight: normal;
+}
+
+.label-white[href]:hover, .label-white[href]:focus {
+  background-color: #EBEBEB;
+  color: #333;
+  border-color: #ADADAD;
+}

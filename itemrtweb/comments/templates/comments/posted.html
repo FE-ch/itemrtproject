@@ -1,0 +1,12 @@
+{% load staticfiles %}
+              <div id="question-comment-{{comment.id}}" class="media">
+                <div class="pull-left">
+                  <img class="media-object" src="{% static '/static/images/profilepic.png' %}" alt="" />
+                </div>
+                <div class="media-body">
+                  <h5 class="media-heading">{{comment.user.get_full_name}} <small><a href="{{ object.get_absolute_url }}#c{{comment.id}}"></a> {{comment.submit_date|timesince}} ago</small><button type="button" class="comment-reply-btn btn btn-primary btn-xs pull-right" value="comment-form-{{comment.id}}">Reply</button></h5>
+                  <p class="comment-content">
+                    {{comment.comment}}
+                  </p>
+                </div>
+              </div>

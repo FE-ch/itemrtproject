@@ -1,0 +1,121 @@
+{% extends "template.base.html" %}
+
+{% block title %}Control Panel{% endblock %}
+
+
+
+
+
+{#############################    This page is currently not being used    ##############################}
+
+
+{% block content %}
+      <div>
+        <h1>Control Panel</h1>
+        <br>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="panel panel-primary">
+              <div class="panel-heading dropdown">
+                <div class="panel-title">
+                  <a class="dropdown-toggle" style="width: 100%;" data-toggle="dropdown" href="#">C Programming<span class="caret"></span></a>
+                  <ul class="dropdown-menu" style="width: 100%; border-top-left-radius: 0px; border-top-right-radius: 0px;">
+                    <li><a href="#">English Grammar</a></li>
+                    <li><a href="#">Python Programming</a></li>
+                    <li><a href="#">Some Other Topic</a></li>
+                  </ul>
+                </div>
+              </div>
+                <ul class="nav nav-stacked nav-compact">
+                  <li class="nav-header">Question Managment</li>
+                  <li><a href="/prototype/"><strong>Insert</strong> Question</a></li>
+                  <li><a href="/prototype/"><strong>View/Edit</strong> Questions</a></li>
+                  <li class="nav-header">CAT Test</li>
+                  <li><a href="/control/cattest/settings/">Test Settings</a></li>
+                  <!--<li><a href="/control/newtest/">Create New Test</a></li>
+                  <li><a href="/control/">Draft Tests<span class="badge pull-right">3</span></a></li>
+                  <li><a href="#">In-Progress Tests<span class="badge pull-right">1</span></a></li>
+                  <li><a href="#">Completed Tests<span class="badge pull-right">0</span></a></li>
+                  <li class="nav-header">Practice</li>
+                  <li><a href="#">Change Practice Mode</a></li>
+                  <li><a href="#">Practice Statistics<span class="badge pull-right">3</span></a></li> -->
+                </ul>
+            </div>
+          </div>
+          <!-- Stop here -->
+          <div class="col-md-9">
+            {% block control-content %}
+            <h2>Draft Tests</h2>
+            <div class="panel panel-default">
+              <table class="table">
+                <thead>
+                    <tr>
+                        <th>Test ID</th>
+                        <th>Questions</th>
+                        <th>Generated at</th>
+                        <th>Created By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for test in tests %}
+                    <tr>
+                        <td><a href="/control/view/{{test.id}}">{{test.id}}</a></td>
+                        <td>{{test.questions.count}}</td>
+                        <td>{{test.generated}}</td>
+                        <td>Administrator</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% if testid %}
+            <!--<ul class="nav nav-tabs">
+              <li><a href="/control/view/{{testid}}/home/">Test Paper {{testid}}</a></li>
+              <li><a href="/control/view/{{testid}}/questions/">Questions</a></li>
+              <li><a href="/control/view/{{testid}}/stats/">Statistics</a></li>
+            </ul> -->
+            <ul class="nav nav-tabs">
+              <li><a href="#home" class="active" data-toggle="tab">Test Paper <strong>{{testid}}</strong></a></li>
+              <li><a href="#questions" data-toggle="tab">Questions</a></li>
+              <li><a href="#stats" data-toggle="tab">Statistics</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="home">
+                <h3>Test {{testid}} is currently {%if thistest.state%}In-Progress{%else%}Draft{%endif%}<span class="pull-right"><button class="btn btn-primary">Publish Test</button></span></h3>
+                <p>Test Questions: {{thistest.questions.count}}</p>
+                <p>Test Difficulty: {{avgdiff}}</p>
+                <a class="btn btn-primary" href="/control/download/{{testid}}">Download Test in LaTeX</a>
+              </div>
+              <div class="tab-pane" id="questions">
+                <h3>Displaying {{questions.count}} Questions<span class="pull-right"><button class="btn btn-primary">Add/Change Questions</button></span></h3>
+                <br><!-- stupid br tag -->
+                <ul class="list-group">
+                  {% for question in questions %}
+                  <li class="list-group-item row">
+                    <h4>Question on {{question.topic}}</h4>
+                    <div class="col-sm-9">
+                      <pre>{{question.text}}</pre>
+                    </div>
+                    <div class="col-sm-3">
+                      <p class="label label-info">Marks: {{question.marks}}</p>
+                      <p class="label label-info">Time Given: {{question.time}}</p>
+                      {% if question.difficulty >= 2 %}
+                      <p class="label label-danger">Difficulty: {{question.difficulty}}</p>
+                      {% elif question.difficulty <= -2 %}
+                      <p class="label label-success">Difficulty: {{question.difficulty}}</p>
+                      {% else %}
+                      <p class="label label-info">Difficulty: {{question.difficulty}}</p>
+                      {% endif %}
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="tab-pane" id="stats">...</div>
+            </div>
+            {% endif %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+{% endblock %}

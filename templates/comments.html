@@ -1,0 +1,36 @@
+{% load comments mptt_tags staticfiles %}
+{% get_comment_list for object as comments %}
+{% if comments %}
+{% recursetree comments %}
+              <div id="question-comment-{{node.id}}" class="media">
+                <div class="pull-left">
+                  <img class="media-object" src="{% static '/static/images/profilepic.png' %}" alt="" />
+                </div>
+                <div class="media-body">
+                  <h5 class="media-heading">{{node.user.get_full_name}} <small><a href="{{ object.get_absolute_url }}#c{{node.id}}"></a> {{node.submit_date|timesince}} ago</small><button type="button" class="comment-reply-btn btn btn-primary btn-xs pull-right" value="comment-form-{{node.id}}">Reply</button></h5>
+                  <p class="comment-content">
+                    {{node.comment}}
+                  </p>
+                </div>
+                <div class="comment-children">
+                  <div class="media">
+                    {% render_comment_form for object %}
+                  </div>
+                  {% if not node.is_leaf_node %}
+                  {{children}}
+                  {% endif %}
+                </div>
+              </div>
+{% endrecursetree %}
+{% else %}
+              <div class="media">
+                <div class="media-body">
+                  <h5>Be the first to start a discussion for this question!</h5>
+                </div>
+              </div>
+{% endif %}
+              <div class="media">
+                <div class="media-body">
+                {% render_comment_form for object %}
+                </div>
+              </div>

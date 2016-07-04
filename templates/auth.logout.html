@@ -1,0 +1,18 @@
+{% extends "template.base.html" %}
+
+{% block extrahead %}
+<meta http-equiv="refresh" content="5;url=/">
+{% endblock %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-lg-10 col-lg-offset-1">
+          <h1>Signed Out</h1>
+          <p>You have successfully signed out of {{ PROJECT_NAME }}.</p>
+          <p>We will be redirecting you back to the home page in 5 seconds.</p>
+        </div>
+        <br>
+      </div>
+{% endblock %}

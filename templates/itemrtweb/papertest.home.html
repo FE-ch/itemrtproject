@@ -1,0 +1,84 @@
+{% extends "template.base.html" %}
+
+{% block title %}Paper Test{% endblock %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-md-12 col-lg-10 col-lg-offset-1">
+          <h1>Paper Test</h1>
+          <blockquote>
+            <p>Pick some options and begin a paper test to test your skills!</p>
+            <small>Paper Tests are generated using test paper generation techniques according to a user's specification. <!--<a href="#">Learn more</a>--></small>
+          </blockquote>
+          <form class="form-horizontal" method="post" role="form">
+            {% csrf_token %}
+            <div class="form-group {% if error.num_qn %}has-error{% endif %}">
+              <label for="num_qn" class="col-sm-3 control-label">Number of Questions</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="num_qn" name="num_qn" placeholder="Max. 25" value="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="qn_diff" class="col-sm-3 control-label">Average Difficulty</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="qn_diff" name="qn_diff" placeholder="Range is 1 (Easiest) to 5 (Hardest), Default 3" value="">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="qn_time" class="col-sm-3 control-label">Time</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="qn_time" name="qn_time" placeholder="3 minutes per question" value="" disabled>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Topics</label>
+              <label class="col-sm-2 control-label" style="text-align: center;">Selected</label>
+              <label class="col-sm-2 control-label" style="text-align: center;">Questions</label>
+              <label class="col-sm-2 control-label" style="text-align: center;">Difficulty</label>
+            </div>
+            {% for topic in topics %}
+            <div class="form-group">
+              <label for="qn_time" class="col-sm-3 control-label">{{ topic }}</label>
+              <div class="col-sm-2">
+                <input type="checkbox" class="form-control" id="topics{{ topic.id }}" name="topics" value="{{ topic.id }}" checked="true">
+              </div>
+              <div class="col-sm-2">
+                <input type="text" class="form-control" id="qns_{{ topic }}" name="qns_{{ topic }}" placeholder="Optional" value="">
+              </div>
+              <div class="col-sm-2">
+                <input type="text" class="form-control" id="diff_{{ topic }}" name="diff_{{ topic }}" placeholder="Optional" value="">
+              </div>
+            </div>
+            {% endfor %}
+            <div class="form-group">
+              <div class="col-sm-6 col-sm-offset-3 ">
+                <button type="submit" class="btn btn-primary">Generate Test</button>
+              </div>
+            </div>
+          </form>
+
+
+          <form class="form-horizontal" method="post" role="form" style="display:none"> <!---->
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group {% if error == 'incorrect' %}has-error{% endif %}">
+              <label for="{{ form.username.id_for_label }}" class="col-sm-3 control-label">Subject</label>
+              <div class="col-sm-6">
+                <div class="form-control-static">CZ1007 - Data Structures</div>
+              </div>
+            </div>
+            <div class="form-group {% if error == 'incorrect' %}has-error{% endif %}">
+              <label for="{{ form.username.id_for_label }}" class="col-sm-3 control-label">Test ID</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="{{ form.username.id_for_label }}" name="test_id" placeholder="" value="{{ form.username.value|default_if_none:'' }}">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-6 col-sm-offset-3 ">
+                <button type="submit" class="btn btn-primary">Open Test</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+{% endblock %}
